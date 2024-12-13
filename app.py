@@ -91,13 +91,13 @@ def dashboard():
     if "username" in session:
         return render_template("dashboard.html", username=session["username"])
     else:
-        return redirect(url_for("index_html"))
+        return redirect(url_for("index"))
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    pass
-
+    session.pop('username', None)
+    return redirect("index")
 
 
 if __name__ == "__main__":

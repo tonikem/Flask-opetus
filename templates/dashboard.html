@@ -3,7 +3,7 @@
 {% block body %}
 <div class="container">
   <h2>Tervetuloa, {{ username }}</h2>
-  <a href="" class="btn btn-logout">Logout</a>
+  <a href="{{url_for('logout')}}" class="btn btn-logout">Logout</a>
 </div>
 {% endblock %}
 
