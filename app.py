@@ -5,9 +5,11 @@ from socks import method
 from werkzeug.security import gen_salt, generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 
+# Palvelin-olio.
 app = Flask(__name__)
 app.secret_key = "qwerty12345"
 
+# Tietokannan muuttujat
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -32,6 +34,7 @@ class Usermodel(db.Model):
         # joka tunnetaan nimellä hash-arvo tai tiiviste.
         self.password_hash = generate_password_hash(password)
 
+    # Tarkistetaan salasanasta saatu hash.
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
@@ -89,6 +92,7 @@ def register():
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
     if "username" in session:
+        # Jos käyttäjä on session-listalla, renderöidään dashboard.html
         return render_template("dashboard.html", username=session["username"])
     else:
         return redirect(url_for("index"))
@@ -96,14 +100,17 @@ def dashboard():
 
 @app.route('/logout', methods=['GET'])
 def logout():
+    # Poistetaan session-listasta käyttäjä pop-komennolla.
     session.pop('username', None)
     return redirect("index")
 
 
 if __name__ == "__main__":
     with app.app_context():
+        # Luodaan tietokanta taulut.
         db.create_all()
 
+    # Ajetaan palvelin.
     app.run(host='0.0.0.0', debug=True)
 
 
