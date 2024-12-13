@@ -1,13 +1,15 @@
-from Demos.win32ts_logoff_disconnected import username
-from flask import Flask, render_template, request, redirect, session, url_for
-from numpy.ma.extras import unique
-from socks import method
-from werkzeug.security import gen_salt, generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, redirect, session, url_for
+from flask_restful import Api, Resource
+from werkzeug.security import gen_salt, generate_password_hash, check_password_hash
+
 
 # Palvelin-olio.
 app = Flask(__name__)
 app.secret_key = "qwerty12345"
+
+# REST-olio
+api = Api(app)
 
 # Tietokannan muuttujat
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.db"
@@ -105,10 +107,18 @@ def logout():
     return redirect("index")
 
 
+class REST_rajapinta(Resource):
+    def get(self):
+        return {"msg": "Hello World!"}
+
+
 if __name__ == "__main__":
     with app.app_context():
         # Luodaan tietokanta taulut.
         db.create_all()
+    
+    # Lisätään rajapinta-resurssi.
+    api.add_resource(REST_rajapinta, "/api")
 
     # Ajetaan palvelin.
     app.run(host='0.0.0.0', debug=True)
