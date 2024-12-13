@@ -115,7 +115,10 @@ class REST_rajapinta(Resource):
         }
     
     def post(self, nimi):
-        return {"msg": "POST-pyyntö"}
+        return {
+            "msg": "POST-pyyntö",
+            "nimi": nimi
+        }
 
 
 if __name__ == "__main__":
