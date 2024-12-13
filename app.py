@@ -108,8 +108,14 @@ def logout():
 
 
 class REST_rajapinta(Resource):
-    def get(self):
-        return {"msg": "Hello World!"}
+    def get(self, nimi):
+        return {
+            "msg": "GET-pyyntö",
+            "nimi": nimi
+        }
+    
+    def post(self, nimi):
+        return {"msg": "POST-pyyntö"}
 
 
 if __name__ == "__main__":
@@ -118,7 +124,7 @@ if __name__ == "__main__":
         db.create_all()
     
     # Lisätään rajapinta-resurssi.
-    api.add_resource(REST_rajapinta, "/api")
+    api.add_resource(REST_rajapinta, "/api/<string:nimi>")
 
     # Ajetaan palvelin.
     app.run(host='0.0.0.0', debug=True)
